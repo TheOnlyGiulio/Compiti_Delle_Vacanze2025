@@ -1,36 +1,92 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+````markdown
+# 🎭 Scam Meme App
 
-## Getting Started
+A fun **Next.js + React Three Fiber** meme project that simulates a "you just got hacked/scammed" experience.  
+It includes a flashy 3D button, Matrix-style hacker console, and fake IP geolocation reveal.
 
-First, run the development server:
+---
+
+## ✨ Features
+- **Next.js 13+** (App Router or Pages Router)
+- **React + Hooks** (`useState`, `useEffect`, `useRef`, `useMemo`)
+- **3D Graphics with Three.js**
+  - via **@react-three/fiber** and **@react-three/drei**
+- **Matrix Rain Effect** with the Canvas 2D API
+- **Geo Data Lookup**
+  - Calls the public API [`https://ipapi.co/json/`](https://ipapi.co/json/)  
+  - Returns your **IP address, city, and country**
+- **Phases**
+  1. Intro screen with scammy banners + 3D claim button  
+  2. Hacker console with fake logs + Matrix rain  
+  3. "Results" with fake reveal and meme ending  
+
+---
+
+## 📡 API Usage
+The app fetches basic geolocation data from:
+
+```http
+GET https://ipapi.co/json/
+````
+
+Response example:
+
+```json
+{
+  "ip": "203.0.113.42",
+  "city": "Example City",
+  "country_name": "Example Country"
+}
+```
+
+---
+
+## 🖥 Requirements
+
+* **Node.js** ≥ 16
+* **npm** (comes with Node.js)
+
+Dependencies:
+
+```bash
+next react react-dom @react-three/fiber @react-three/drei three
+```
+
+---
+
+## 🚀 Getting Started
+
+### 1. Create a Next.js project
+
+```bash
+npx create-next-app scam-meme
+cd scam-meme
+```
+
+### 2. Install dependencies
+
+```bash
+npm install @react-three/fiber @react-three/drei three
+```
+
+### 3. Add the code
+
+* If using **App Router (Next.js 13+)**: put the code in `app/page.tsx`
+* If using **Pages Router**: put the code in `pages/index.tsx`
+
+### 4. Run in development
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open in browser: [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## ⚙️ Development Notes
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+* Purely **client-side app** — no backend required.
+* Designed for **meme/demo purposes only**.
+* The “hack” is completely fake (it just uses public IP API).
+* Fun example of mixing **3D graphics + React + Next.js**.
