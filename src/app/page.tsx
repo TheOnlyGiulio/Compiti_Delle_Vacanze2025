@@ -14,8 +14,6 @@ import {
 } from "@react-three/drei";
 import type { Group } from "three";
 
-/* ---------- Types & API ---------- */
-
 type GeoData = {
   ip: string;
   city: string;
@@ -27,8 +25,6 @@ async function fetchGeoData(): Promise<GeoData> {
   if (!res.ok) throw new Error("Failed to fetch geo data");
   return res.json();
 }
-
-/* ---------- Phase 1: 3D Scam Button ---------- */
 
 function Button3D({
   label,
@@ -70,19 +66,14 @@ function Button3D({
         onPress();
       }}
     >
-      {/* Sparkly field for extra ✨ scamminess */}
       <Sparkles count={60} scale={[6, 3, 1]} speed={0.6} size={2} />
-
-      {/* Pulsing "starburst" backdrop */}
       <Float speed={2} rotationIntensity={0.2} floatIntensity={0.3}>
         <mesh position={[0, 0, -0.05]}>
           <circleGeometry args={[2.2, 64]} />
           <meshBasicMaterial color={"#ffd700"} />
         </mesh>
       </Float>
-
       <Center>
-        {/* Base plate */}
         <RoundedBox args={[3.6, 1.4, 0.5]} radius={0.22} smoothness={8}>
           <meshStandardMaterial
             color={"#d32f2f"}
@@ -92,8 +83,6 @@ function Button3D({
             emissiveIntensity={0.15}
           />
         </RoundedBox>
-
-        {/* Top cap */}
         <group position={[0, 0, 0.18]}>
           <RoundedBox args={[3.2, 1.1, 0.25]} radius={0.2} smoothness={8}>
             <meshStandardMaterial
@@ -105,8 +94,6 @@ function Button3D({
             />
           </RoundedBox>
         </group>
-
-        {/* SCREAMING LABEL */}
         <Text
           position={[0, 0, 0.36]}
           fontSize={0.35}
@@ -133,24 +120,14 @@ function ThreeScene({ onPress }: { onPress: () => void }) {
         <directionalLight position={[4, 6, 6]} intensity={1.3} />
         <Button3D label="Claim My Prize Now" onPress={onPress} baseScale={0.7} />
         <Environment preset="city" />
-        <ContactShadows
-          position={[0, -0.9, 0]}
-          opacity={0.5}
-          scale={8}
-          blur={2.5}
-          far={2}
-        />
-        {/* Disable rotations so clicks always hit the button */}
+        <ContactShadows position={[0, -0.9, 0]} opacity={0.5} scale={8} blur={2.5} far={2} />
         <OrbitControls enablePan={false} enableZoom={false} enableRotate={false} />
       </Canvas>
     </div>
   );
 }
 
-/* ---------- Phase 2: Fake Hacker Console (Matrix + Logs) ---------- */
-
 function MatrixRain() {
-  // super simple matrix effect using a canvas
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
@@ -273,14 +250,10 @@ const hackStyles: Record<string, React.CSSProperties> = {
   },
 };
 
-/* ---------- Phase 3: Results (Hacker Laugh) ---------- */
-
 function Results({ data }: { data: GeoData }) {
   return (
     <div style={{ textAlign: "center", marginTop: "1.5rem", color: "#fff" }}>
-      <h2 style={{ fontSize: "2rem", color: "#0f0" }}>
-        ✅ Hack Complete! We know where you live 👀
-      </h2>
+      <h2 style={{ fontSize: "2rem", color: "#0f0" }}>✅ Hack Complete! We know where you live 👀</h2>
       <p>
         IP: <b>{data.ip}</b> <br />
         City: <b>{data.city}</b> <br />
@@ -296,23 +269,18 @@ function Results({ data }: { data: GeoData }) {
       >
         😂😂😂 YOU JUST GOT SCAMMED 😂😂😂
       </h1>
-      <p style={{ marginTop: "0.5rem", color: "#aaa" }}>
-        (relax, it’s a meme — no real hacking here)
-      </p>
+      <p style={{ marginTop: "0.5rem", color: "#aaa" }}>(relax, it’s a meme — no real hacking here)</p>
     </div>
   );
 }
 
-/* ---------- Main Page (Phases + Start Styles) ---------- */
-
 export default function Home() {
   const [geoData, setGeoData] = useState<GeoData | null>(null);
   const [loading, setLoading] = useState(false);
-  const [countdown, setCountdown] = useState(666); // because of course
+  const [countdown, setCountdown] = useState(666);
   const [phase, setPhase] = useState<"intro" | "hacking" | "results">("intro");
   const [logs, setLogs] = useState<string[]>([]);
 
-  // Fake countdown timer (intro meme)
   useEffect(() => {
     const t = setInterval(() => {
       setCountdown((c) => (c > 0 ? c - 1 : 0));
@@ -341,15 +309,12 @@ export default function Home() {
     setPhase("hacking");
     setLogs([]);
     setLoading(true);
-
-    // stream the fake logs
     let i = 0;
     const interval = setInterval(() => {
       setLogs((prev) => [...prev, fakeMessages[i]]);
       i++;
       if (i >= fakeMessages.length) {
         clearInterval(interval);
-        // after logs, call the real API
         fetchGeoData()
           .then((data) => {
             setGeoData(data);
@@ -360,12 +325,11 @@ export default function Home() {
           })
           .finally(() => setLoading(false));
       }
-    }, 600); // fast spam for meme vibes
+    }, 600);
   };
 
   return (
     <main style={styles.page}>
-      {/* TOP BANNERS */}
       {phase === "intro" && (
         <div style={styles.marqueeWrap}>
           <div style={{ ...styles.marquee, ...styles.marquee1 }}>
@@ -376,21 +340,15 @@ export default function Home() {
           </div>
         </div>
       )}
-
-      {/* TITLE / HEADLINE */}
       {phase === "intro" && (
         <>
-          <h1 style={styles.title}>
-            🎉 CONGRATULATIONS! YOU JUST WON $5,000,000! 🎉
-          </h1>
+          <h1 style={styles.title}>🎉 CONGRATULATIONS! YOU JUST WON $5,000,000! 🎉</h1>
           <p style={styles.subtitle}>
             Only <b style={{ color: "#fff" }}>{countdown}</b> seconds left to claim!
           </p>
-          {/* 3D CLAIM BUTTON */}
           <ThreeScene onPress={startFakeHack} />
         </>
       )}
-
       {phase === "hacking" && (
         <>
           <h1 style={{ ...styles.title, color: "#00e676", textShadow: "0 0 16px #00e676" }}>
@@ -400,17 +358,12 @@ export default function Home() {
           {loading && <p style={styles.loading}>Enhancing meme payload…</p>}
         </>
       )}
-
       {phase === "results" && geoData && (
         <>
-          <h1 style={{ ...styles.title, color: "#ffd700" }}>
-            💰 CLAIM COMPLETE! (totally real)
-          </h1>
+          <h1 style={{ ...styles.title, color: "#ffd700" }}>💰 CLAIM COMPLETE! (totally real)</h1>
           <Results data={geoData} />
         </>
       )}
-
-      {/* TRUST BADGES + TESTIMONIALS (keep them visible on intro only for the meme layout) */}
       {phase === "intro" && (
         <>
           <div style={styles.badges}>
@@ -419,7 +372,6 @@ export default function Home() {
             <span style={styles.badge}>🦄 Certified by Unicorn Auditors*</span>
           </div>
           <p style={styles.asterisk}>*not actually a thing</p>
-
           <div style={styles.testimonials}>
             <div style={styles.card}>
               <b>“I clicked and now I’m a billionaire (in exposure)!”</b>
@@ -440,8 +392,6 @@ export default function Home() {
   );
 }
 
-/* ---------- Start Page Styles (from your meme start) ---------- */
-
 const styles: Record<string, React.CSSProperties> = {
   page: {
     minHeight: "100vh",
@@ -451,8 +401,7 @@ const styles: Record<string, React.CSSProperties> = {
     justifyContent: "flex-start",
     padding: "1.25rem",
     gap: "0.5rem",
-    background:
-      "linear-gradient(120deg, #111 0%, #1a002b 30%, #001a2b 70%, #111 100%)",
+    background: "linear-gradient(120deg, #111 0%, #1a002b 30%, #001a2b 70%, #111 100%)",
     backgroundSize: "400% 400%",
     animation: "bgShift 10s ease infinite",
     color: "#ffe57f",
@@ -463,8 +412,7 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: "3rem",
     fontWeight: 900,
     color: "#ffd700",
-    textShadow:
-      "0 0 6px #ff0000, 0 0 18px #ff0000, 0 0 32px #ff6d00, 0 0 48px #ffd600",
+    textShadow: "0 0 6px #ff0000, 0 0 18px #ff0000, 0 0 32px #ff6d00, 0 0 48px #ffd600",
     letterSpacing: "0.02em",
   },
   subtitle: {
@@ -503,8 +451,7 @@ const styles: Record<string, React.CSSProperties> = {
     marginTop: "0.5rem",
   },
   badge: {
-    background:
-      "linear-gradient(90deg, #00e5ff, #18ffff, #00e5ff, #18ffff)",
+    background: "linear-gradient(90deg, #00e5ff, #18ffff, #00e5ff, #18ffff)",
     padding: "0.35rem 0.6rem",
     borderRadius: 999,
     color: "#001018",
@@ -538,8 +485,6 @@ const styles: Record<string, React.CSSProperties> = {
     boxShadow: "0 12px 32px rgba(0,0,0,0.35)",
   },
 };
-
-/* ---------- Global Keyframes (inject once; move to CSS if you want) ---------- */
 
 if (typeof document !== "undefined") {
   const id = "meme-keyframes";
